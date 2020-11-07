@@ -97,3 +97,53 @@ Future<List> obtenerTerminales()async{
 
   // ...
 }
+
+
+
+const String addEmpresa = r'''
+
+mutation addEmpresa($idTerminal: uuid, $imageURL: String, $nombreEmp: String, $numContacto: String) {
+  insert_Empresa(objects: {idTerminal: $idTerminal, imageURL: $imageURL, nombreEmpresa: $nombreEmp, numeroContacto: $numContacto}) {
+    returning {
+      idEmpresa
+      idTerminal
+      imageURL
+      nombreEmpresa
+      numeroContacto
+    }
+  }
+}
+
+
+''';
+
+Future<bool> insertarEmpresa({String idTerminal, String imageURL,String nombreEmp, String numContacto})async{
+  final MutationOptions options = MutationOptions(
+    documentNode: gql(addEmpresa),
+    variables: <String, dynamic>{
+      "idTerminal": idTerminal,
+      "imageURL": imageURL,
+      "nombreEmp": nombreEmp,
+      "numContacto": numContacto,
+    },
+  );
+  final QueryResult result = await _client.mutate(options);
+  
+  if (result.hasException) {
+      print(result.exception.toString());
+      return false;
+  }else{
+    print(result);
+    return true;
+  }
+
+  // final bool isStarred =  
+  //     result.data['action']['starrable']['viewerHasStarred'] as bool;
+
+  // if (isStarred) {
+  //   print('Thanks for your star!');
+  //   return;
+  // }
+
+
+}

@@ -225,27 +225,32 @@ class _RegistroEmpresasState extends State<RegistroEmpresas> {
                   duration:  Duration(seconds: 2),
                   backgroundColor: Colors.orange,             
                 )..show(context);
-          print("===== ");
-          // ####### bool state = await insertarTerminal(textController.text, position.toString());
+          print("===== $value");
+          bool state = await insertarEmpresa(
+            idTerminal: value,
+            imageURL: "url https//",
+            nombreEmp: textControllername.text,
+            numContacto: textControllernumber.text
+          );
 
-          // if(state){
-          //   Flushbar(
-          //     title:  "Aceptado",
-          //     message:  "El dato fue completado exitosamente",
-          //     duration:  Duration(seconds: 3),              
-          //     backgroundColor: Colors.green,
-          //   )..show(context);
-          //   new Future.delayed(Duration(milliseconds: 3001),() {
-          //     Navigator.pop(context);
-          //   });
-          // }else{
-          //   Flushbar(
-          //     title:  "ERROR",
-          //     message:  "Sucedio un error por favor verifica tu conexion y que tu GPS este activado",
-          //     duration:  Duration(seconds: 3),              
-          //     backgroundColor: Colors.red,
-          //   )..show(context);
-          // }
+          if(state){
+            Flushbar(
+              title:  "Aceptado",
+              message:  "El dato fue completado exitosamente",
+              duration:  Duration(seconds: 3),              
+              backgroundColor: Colors.green,
+            )..show(context);
+            new Future.delayed(Duration(milliseconds: 3001),() {
+              Navigator.pop(context);
+            });
+          }else{
+            Flushbar(
+              title:  "ERROR",
+              message:  "Sucedio un error por favor verifica tu conexion y que tu GPS este activado",
+              duration:  Duration(seconds: 3),              
+              backgroundColor: Colors.red,
+            )..show(context);
+          }
         },
         child: Text("Guardar transporte"),
         color: Colors.orange,
