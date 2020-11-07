@@ -30,6 +30,8 @@ dependencies:
   cupertino_icons: ^1.0.0
   google_maps_flutter: ^0.5.5
   geolocator: ^6.1.4
+  graphql: ^3.0.0
+  flushbar: ^1.10.4
 
 dev_dependencies:
   flutter_test:

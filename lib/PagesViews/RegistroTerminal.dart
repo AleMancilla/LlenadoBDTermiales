@@ -1,11 +1,13 @@
 
 import 'dart:async';
 
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 //AIzaSyCLrciNQx1xIXDeOUQCOWEbhzgq_NeIe0w
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:llenarbdbuses/BD/graphql.dart';
 
 class RegistroTerminal extends StatefulWidget {
   @override
@@ -36,6 +38,7 @@ class _RegistroTerminalState extends State<RegistroTerminal> {
 
   GoogleMapController mapController;
   Set<Marker> _markers = {};
+  Position position ;
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +86,36 @@ class _RegistroTerminalState extends State<RegistroTerminal> {
       margin: EdgeInsets.symmetric(vertical: 30),
       child: CupertinoButton(
         onPressed: () async {
+          Flushbar(
+                  title:  "Enviando datos a backend",
+                  message:  "Porfavor espera unos segundos mientras se completa la accion",
+                  duration:  Duration(seconds: 2),
+                  backgroundColor: Colors.orange,             
+                )..show(context);
           print("===== ");
           // print(textController.text);
           // Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
           // print(position);
-          
+          bool state = await insertarTerminal(textController.text, position.toString());
+
+          if(state){
+            Flushbar(
+              title:  "Aceptado",
+              message:  "El dato fue completado exitosamente",
+              duration:  Duration(seconds: 3),              
+              backgroundColor: Colors.green,
+            )..show(context);
+            new Future.delayed(Duration(milliseconds: 3001),() {
+              Navigator.pop(context);
+            });
+          }else{
+            Flushbar(
+              title:  "ERROR",
+              message:  "Sucedio un error por favor verifica tu conexion y que tu GPS este activado",
+              duration:  Duration(seconds: 3),              
+              backgroundColor: Colors.red,
+            )..show(context);
+          }
         },
         child: Text("Enviar"),
         color: Colors.orange,
@@ -123,10 +151,16 @@ class _RegistroTerminalState extends State<RegistroTerminal> {
       width: double.infinity,
       child: CupertinoButton(
         onPressed: () async {
+          Flushbar(
+              title:  "Procesando",
+              message:  "Obteniendo el dato de la ubicacion..",
+              duration:  Duration(seconds: 3),              
+              backgroundColor: Colors.green,
+            )..show(context);
           print("===== ");
           // print(textController.text);
-          Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-          print(position);
+          position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+          print(position.toString());
 
           CameraPosition kLake = CameraPosition(
           // bearing: 192.8334901395799,
