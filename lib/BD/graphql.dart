@@ -62,3 +62,38 @@ Future<bool> insertarTerminal(String name, String ubicacion)async{
 
 
 }
+
+const String readRepositories = r'''
+  query getTerminal {
+    Terminal {
+      nombre
+      terminalID
+    }
+  }
+''';
+
+Future<List> obtenerTerminales()async{
+  // const int nRepositories = 50;
+
+  final QueryOptions options = QueryOptions(
+      documentNode: gql(readRepositories),
+      // variables: <String, dynamic>{
+      //     'nRepositories': nRepositories,
+      // },
+  );
+
+  final QueryResult result = await _client.query(options);
+
+  if (result.hasException) {
+      print(result.exception.toString());
+      return [];
+  }else{
+    print(result.data);
+    return result.data["Terminal"];
+  }
+
+  // final List<dynamic> repositories =
+  //     result.data['viewer']['repositories']['nodes'] as List<dynamic>;
+
+  // ...
+}

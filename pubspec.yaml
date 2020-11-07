@@ -32,6 +32,9 @@ dependencies:
   geolocator: ^6.1.4
   graphql: ^3.0.0
   flushbar: ^1.10.4
+  smart_select: ^4.3.2
+  sticky_headers: "^0.1.8"
+  provider: ^4.3.2+2
 
 dev_dependencies:
   flutter_test:

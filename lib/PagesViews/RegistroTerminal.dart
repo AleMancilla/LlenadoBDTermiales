@@ -47,7 +47,7 @@ class _RegistroTerminalState extends State<RegistroTerminal> {
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Container(
-            // color: Colors.red,
+            color: Colors.transparent,
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
