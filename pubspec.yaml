@@ -35,6 +35,7 @@ dependencies:
   smart_select: ^4.3.2
   sticky_headers: "^0.1.8"
   provider: ^4.3.2+2
+  image_picker: ^0.6.7+12
 
 dev_dependencies:
   flutter_test:
