@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llenarbdbuses/PagesViews/RegistroDestino.dart';
 import 'package:llenarbdbuses/PagesViews/RegistroEmpresas.dart';
 import 'package:llenarbdbuses/PagesViews/RegistroTerminal.dart';
 import 'package:llenarbdbuses/Widgets/BotonWidget.dart';
@@ -20,7 +21,9 @@ class HomePage extends StatelessWidget {
             BotonWidget(texto: "Registro de empresas de transporte",fun:(){
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => RegistroEmpresas()));
             }),
-            BotonWidget(texto: "Registro de ruta",fun:(){}),
+            BotonWidget(texto: "Registro de ruta",fun:(){
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => RegistroDestino()));
+            }),
           ],
         ),
       ),

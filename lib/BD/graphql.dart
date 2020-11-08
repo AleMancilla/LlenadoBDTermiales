@@ -146,4 +146,45 @@ Future<bool> insertarEmpresa({String idTerminal, String imageURL,String nombreEm
   // }
 
 
+  
+
+
+
+
 }
+
+const String readRepositoriesEmpresas = r'''
+    query obtenerEmpresa {
+    Empresa {
+      idEmpresa
+      nombreEmpresa
+    }
+  }
+
+  ''';
+
+  Future<List> obtenerEmpresa()async{
+    // const int nRepositories = 50;
+
+    final QueryOptions options = QueryOptions(
+        documentNode: gql(readRepositoriesEmpresas),
+        // variables: <String, dynamic>{
+        //     'nRepositories': nRepositories,
+        // },
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    if (result.hasException) {
+        print(result.exception.toString());
+        return [];
+    }else{
+      print(result.data);
+      return result.data["Empresa"];
+    }
+
+    // final List<dynamic> repositories =
+    //     result.data['viewer']['repositories']['nodes'] as List<dynamic>;
+
+    // ...
+  }
