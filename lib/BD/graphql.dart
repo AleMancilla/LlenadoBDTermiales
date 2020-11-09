@@ -1,3 +1,5 @@
+import 'package:flushbar/flushbar.dart';
+import 'package:flutter/material.dart';
 import 'package:graphql/client.dart';
 
 final HttpLink _httpLink = HttpLink(
@@ -186,5 +188,65 @@ const String readRepositoriesEmpresas = r'''
     // final List<dynamic> repositories =
     //     result.data['viewer']['repositories']['nodes'] as List<dynamic>;
 
-    // ...
+  // ...
+}
+
+
+
+
+const String addDestino = r'''
+
+mutation insertDestino($idTerminal: uuid, $idEmpresa: uuid, $destino: String, $hora: String, $diasHabiles: json, $costoViaje: float8, $tiempoViaje: float8) {
+  insert_Destino(objects: {idTerminal: $idTerminal, idEmpresa: $idEmpresa, destino: $destino, hora: $hora, diasHabiles: $diasHabiles, costoViaje: $costoViaje, tiempoViaje: $tiempoViaje}) {
+    returning {
+      idDestino
+      costoViaje
+      destino
+      diasHabiles
+    }
   }
+}
+
+
+
+''';
+
+Future<bool> insertarDestino({String idTerminal,String idEmpresa, String destino,String hora, Map diasHabiles,double costoViaje,double tiempoViaje})async{
+  final MutationOptions options = MutationOptions(
+    documentNode: gql(addDestino),
+    variables: <String, dynamic>{
+      "idTerminal": idTerminal,
+      "idEmpresa": idEmpresa,
+      "destino": destino,
+      "hora": hora,
+      "diasHabiles": diasHabiles,
+      "costoViaje": costoViaje,
+      "tiempoViaje": tiempoViaje
+    },
+  );
+  final QueryResult result = await _client.mutate(options);
+  
+  if (result.hasException) {
+      print(result.exception.toString());
+      
+      return false;
+  }else{
+    print(result);
+    return true;
+  }
+
+  // final bool isStarred =  
+  //     result.data['action']['starrable']['viewerHasStarred'] as bool;
+
+  // if (isStarred) {
+  //   print('Thanks for your star!');
+  //   return;
+  // }
+
+
+  
+
+
+
+
+}

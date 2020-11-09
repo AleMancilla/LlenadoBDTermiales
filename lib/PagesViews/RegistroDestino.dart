@@ -31,6 +31,7 @@ class _RegistroDestinoState extends State<RegistroDestino> {
   bool domingo = false;
 
   List<ItemListViaje> listaRutasTemp = [];
+  List<ItemListDestino> listaDestino = [];
 
   @override
   void initState() {
@@ -376,6 +377,25 @@ class _RegistroDestinoState extends State<RegistroDestino> {
             tiempo: double.parse(textControllerEstimado.text));
 
           listaRutasTemp.add(itemAux);
+
+          ItemListDestino destino = ItemListDestino(
+            terminal: terminal, 
+            empresa: empresa, 
+            destino: textControllerDestino.text, 
+            hora: hora, 
+            dias: {
+              "lun":lunes,
+              "mar":martes,
+              "mie":miercoles,
+              "jue":jueves,
+              "vie":viernes,
+              "sab":sabado,
+              "dom":domingo
+            }, 
+            costo: double.parse(textControllerPasaje.text), 
+            tiempo: double.parse(textControllerEstimado.text)
+          );
+          listaDestino.add(destino);
           setState(() {
             
           });
@@ -428,13 +448,45 @@ class _RegistroDestinoState extends State<RegistroDestino> {
       margin: EdgeInsets.symmetric(vertical: 30),
       child: CupertinoButton(
         onPressed: () async {
-          Navigator.pop(context);
-          // Flushbar(
-          //         title:  "Enviando datos a backend",
-          //         message:  "Porfavor espera unos segundos mientras se completa la accion",
-          //         duration:  Duration(seconds: 2),
-          //         backgroundColor: Colors.orange,             
-          //       )..show(context);
+          // Navigator.pop(context);
+          // bool state = await insertarDestino(
+          //   idTerminal: terminal,
+          //   idEmpresa: empresa,
+          //   destino: textControllerDestino.text,
+          //   hora: hora,
+          //   diasHabiles: {
+          //     "lun":lunes,
+          //     "mar":martes,
+          //     "mie":miercoles,
+          //     "jue":jueves,
+          //     "vie":viernes,
+          //     "sab":sabado,
+          //     "dom":domingo
+          //   },
+          //   costoViaje: double.parse(textControllerPasaje.text),
+          //   tiempoViaje: double.parse(textControllerEstimado.text)
+          // );
+          bool state = true;
+          listaDestino.forEach((ItemListDestino element) async { 
+            if(state){
+              state = await insertarDestino(
+                idTerminal: element.terminal,
+                idEmpresa: element.empresa,
+                destino: element.destino,
+                hora: element.hora,
+                diasHabiles: element.dias,
+                costoViaje: element.costo,
+                tiempoViaje: element.tiempo
+              );
+            }
+          });
+
+          Flushbar(
+                  title:  "Enviando datos a backend",
+                  message:  "Porfavor espera unos segundos mientras se completa la accion",
+                  duration:  Duration(seconds: 2),
+                  backgroundColor: Colors.orange,             
+                )..show(context);
           // print("===== $value");
           // bool state = await insertarEmpresa(
           //   idTerminal: value,
@@ -443,27 +495,27 @@ class _RegistroDestinoState extends State<RegistroDestino> {
           //   numContacto: textControllernumber.text
           // );
 
-          // if(state){
-          //   Flushbar(
-          //     title:  "Aceptado",
-          //     message:  "El dato fue completado exitosamente",
-          //     duration:  Duration(seconds: 3),              
-          //     backgroundColor: Colors.green,
-          //   )..show(context);
-          //   new Future.delayed(Duration(milliseconds: 3001),() {
-          //     Navigator.pop(context);
-          //   });
-          // }else{
-          //   Flushbar(
-          //     title:  "ERROR",
-          //     message:  "Sucedio un error por favor verifica tu conexion y que tu GPS este activado",
-          //     duration:  Duration(seconds: 3),              
-          //     backgroundColor: Colors.red,
-          //   )..show(context);
-          // }
+          if(state){
+            Flushbar(
+              title:  "Aceptado",
+              message:  "El dato fue completado exitosamente",
+              duration:  Duration(seconds: 3),              
+              backgroundColor: Colors.green,
+            )..show(context);
+            new Future.delayed(Duration(milliseconds: 3001),() {
+              Navigator.pop(context);
+            });
+          }else{
+            Flushbar(
+              title:  "ERROR",
+              message:  "Sucedio un error por favor verifica tu conexion y que tu GPS este activado",
+              duration:  Duration(seconds: 3),              
+              backgroundColor: Colors.red,
+            )..show(context);
+          }
         },
         child: Text("Guardar transporte"),
-        color: Colors.orange,
+        color: Colors.green,
       ),
     );
   }
@@ -602,4 +654,24 @@ class _ItemListViajeState extends State<ItemListViaje> with TickerProviderStateM
       ),
     );
   }
+}
+
+class ItemListDestino {
+  String terminal;
+  String empresa;
+  String destino;
+  String hora;
+  Map    dias;
+  double costo;
+  double tiempo;
+
+  ItemListDestino(
+  { @required this.terminal,
+    @required this.empresa,
+    @required this.destino,
+    @required this.hora,
+    @required this.dias,
+    @required this.costo,
+    @required this.tiempo,
+    });
 }
