@@ -37,6 +37,7 @@ dependencies:
   provider: ^4.3.2+2
   image_picker: ^0.6.7+12
   flutter_datetime_picker: ^1.4.0
+  mime_type: ^0.3.2
 
 dev_dependencies:
   flutter_test:
