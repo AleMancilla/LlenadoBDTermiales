@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:llenarbdbuses/PagesViews/PageListadoExistente.dart';
 import 'package:llenarbdbuses/PagesViews/RegistroDestino.dart';
 import 'package:llenarbdbuses/PagesViews/RegistroEmpresas.dart';
 import 'package:llenarbdbuses/PagesViews/RegistroTerminal.dart';
@@ -23,6 +24,9 @@ class HomePage extends StatelessWidget {
             }),
             BotonWidget(texto: "Registro de ruta",fun:(){
               Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => RegistroDestino()));
+            }),
+            BotonWidget(texto: "Listado solo verificacion",fun:(){
+              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => PageListadoExistente()));
             }),
           ],
         ),

@@ -253,3 +253,49 @@ Future<bool> insertarDestino({String idTerminal,String idEmpresa, String destino
 limpiarCache(){
   _client.cache.reset();
 }
+
+
+const String listadoRegistrados = r'''
+    query listadoRegistrados {
+  Destino {
+    Terminal {
+      nombre
+    }
+    Empresa {
+      nombreEmpresa
+    }
+    destino
+    hora
+    costoViaje
+    tiempoViaje
+    diasHabiles
+  }
+}
+
+  ''';
+
+  Future<List> obtenerListadoExistente()async{
+    // const int nRepositories = 50;
+
+    final QueryOptions options = QueryOptions(
+        documentNode: gql(listadoRegistrados),
+        // variables: <String, dynamic>{
+        //     'nRepositories': nRepositories,
+        // },
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    if (result.hasException) {
+        print(result.exception.toString());
+        return [];
+    }else{
+      print(result.data);
+      return result.data["Destino"];
+    }
+
+    // final List<dynamic> repositories =
+    //     result.data['viewer']['repositories']['nodes'] as List<dynamic>;
+
+  // ...
+}
