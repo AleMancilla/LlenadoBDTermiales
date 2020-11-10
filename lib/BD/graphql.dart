@@ -1,5 +1,4 @@
-import 'package:flushbar/flushbar.dart';
-import 'package:flutter/material.dart';
+
 import 'package:graphql/client.dart';
 
 final HttpLink _httpLink = HttpLink(
@@ -249,4 +248,8 @@ Future<bool> insertarDestino({String idTerminal,String idEmpresa, String destino
 
 
 
+}
+
+limpiarCache(){
+  _client.cache.reset();
 }

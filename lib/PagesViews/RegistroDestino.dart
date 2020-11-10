@@ -9,6 +9,10 @@ class RegistroDestino extends StatefulWidget {
   _RegistroDestinoState createState() => _RegistroDestinoState();
 }
 
+
+  List<ItemListViaje> listaRutasTemp = [];
+  List<ItemListDestino> listaDestino = [];
+
 class _RegistroDestinoState extends State<RegistroDestino> {
   TextEditingController textControllerDestino = new TextEditingController();
   TextEditingController textControllerPasaje = new TextEditingController();
@@ -30,8 +34,8 @@ class _RegistroDestinoState extends State<RegistroDestino> {
   bool sabado = false;
   bool domingo = false;
 
-  List<ItemListViaje> listaRutasTemp = [];
-  List<ItemListDestino> listaDestino = [];
+  int indexDiss = 0;
+
 
   @override
   void initState() {
@@ -360,6 +364,7 @@ class _RegistroDestinoState extends State<RegistroDestino> {
           // """);
 
           ItemListViaje itemAux = new ItemListViaje(
+            index: indexDiss,
             terminal: terminalNAME, 
             empresa: empresaNAME, 
             destino: textControllerDestino.text, 
@@ -379,6 +384,7 @@ class _RegistroDestinoState extends State<RegistroDestino> {
           listaRutasTemp.add(itemAux);
 
           ItemListDestino destino = ItemListDestino(
+            index: indexDiss,
             terminal: terminal, 
             empresa: empresa, 
             destino: textControllerDestino.text, 
@@ -435,6 +441,7 @@ class _RegistroDestinoState extends State<RegistroDestino> {
           //     backgroundColor: Colors.red,
           //   )..show(context);
           // }
+          indexDiss++;
         },
         child: Text("GUARDAR REGISTRO DE RUTA"),
         color: Colors.orange,
@@ -504,6 +511,9 @@ class _RegistroDestinoState extends State<RegistroDestino> {
             )..show(context);
             new Future.delayed(Duration(milliseconds: 3001),() {
               Navigator.pop(context);
+              listaRutasTemp.clear();
+              listaDestino.clear();
+              indexDiss = 0;
             });
           }else{
             Flushbar(
@@ -513,16 +523,20 @@ class _RegistroDestinoState extends State<RegistroDestino> {
               backgroundColor: Colors.red,
             )..show(context);
           }
+          limpiarCache();
         },
         child: Text("Guardar transporte"),
         color: Colors.green,
       ),
     );
   }
+
+
 }
 
 
 class ItemListViaje extends StatefulWidget {
+  final int index;
   final String terminal;
   final String empresa;
   final String destino;
@@ -533,7 +547,7 @@ class ItemListViaje extends StatefulWidget {
 
   
 
-  const ItemListViaje({@required this.terminal,@required this.empresa,@required this.destino,@required this.hora,@required this.dias,@required this.costo,@required this.tiempo});
+  const ItemListViaje({@required this.index, @required this.terminal,@required this.empresa,@required this.destino,@required this.hora,@required this.dias,@required this.costo,@required this.tiempo});
 
   @override
   _ItemListViajeState createState() => _ItemListViajeState();
@@ -567,96 +581,117 @@ class _ItemListViajeState extends State<ItemListViaje> with TickerProviderStateM
     Size size = MediaQuery.of(context).size;
     final TextStyle estiloTexto = TextStyle(fontWeight: FontWeight.bold);
     
-    return Container(
-      width: size.width,
-      decoration: BoxDecoration(
-        color: _animation.value,
-        borderRadius: BorderRadius.circular(5)
+    return Dismissible(
+      background: Container(
+        color: Colors.red,
       ),
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.symmetric(horizontal: 10,vertical: 2),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Text("Terminal Origen:\t ",style: estiloTexto,),
-              Text(this.widget.terminal)
-            ],
-          ),
-
-          Row(
-            children: [
-              Text("Empresa de transporte:\t ",style: estiloTexto,),
-              Text(this.widget.empresa)
-            ],
-          ),
-
-          Row(
-            children: [
-              Text("Destino:\t ",style: estiloTexto,),
-              Text(this.widget.destino)
-            ],
-          ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              
-              Icon(Icons.timelapse),
-              Text(this.widget.hora),
-              SizedBox(width: 30,),
-              Icon(Icons.monetization_on),
-              Text(this.widget.costo.toString()+" Bs."),
-              SizedBox(width: 30,),
-              Icon(Icons.car_repair),
-              Text(this.widget.tiempo.toString()+" Hrs."),
-
-            ],
-          ),
-            RichText(
-            text: TextSpan(
-                // text: 'Don\'t have an account?',
-                // style: TextStyle(
-                //     color: Colors.black, fontSize: 18),
-                children: <TextSpan>[
-                  TextSpan(text: 'LU,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["lun"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'MA,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["mar"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'MI,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["mie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'JU,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["jue"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'VI,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["vie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'SA,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["sab"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'DO. ',
-                      style: TextStyle(
-                          color: (this.widget.dias["dom"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                ]
+      key: ValueKey("${this.widget.index}"),
+      onDismissed: (direction) {
+        print(this.widget.index);
+        int i =0;
+        int indexDelete = -1;
+        listaRutasTemp.forEach((element) { 
+          if(element.index == this.widget.index){
+            indexDelete = i;
+          }
+          i++;
+        });
+        listaRutasTemp.removeAt(indexDelete);
+        listaDestino.removeAt(indexDelete);
+        // _RegistroDestinoState.eliminarDeLista();
+      },
+      child: Container(
+        width: size.width,
+        decoration: BoxDecoration(
+          color: _animation.value,
+          borderRadius: BorderRadius.circular(5)
+        ),
+        padding: EdgeInsets.all(8),
+        margin: EdgeInsets.symmetric(horizontal: 10,vertical: 2),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text("Terminal Origen:\t ",style: estiloTexto,),
+                Text(this.widget.terminal)
+              ],
             ),
-          ),
-        ],
+
+            Row(
+              children: [
+                Text("Empresa de transporte:\t ",style: estiloTexto,),
+                Text(this.widget.empresa)
+              ],
+            ),
+
+            Row(
+              children: [
+                Text("Destino:\t ",style: estiloTexto,),
+                Text(this.widget.destino)
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                
+                Icon(Icons.timelapse),
+                Text(this.widget.hora),
+                SizedBox(width: 30,),
+                Icon(Icons.monetization_on),
+                Text(this.widget.costo.toString()+" Bs."),
+                SizedBox(width: 30,),
+                Icon(Icons.car_repair),
+                Text(this.widget.tiempo.toString()+" Hrs."),
+
+              ],
+            ),
+              RichText(
+              text: TextSpan(
+                  // text: 'Don\'t have an account?',
+                  // style: TextStyle(
+                  //     color: Colors.black, fontSize: 18),
+                  children: <TextSpan>[
+                    TextSpan(text: 'LU,   ',
+                        style: TextStyle(
+                            color: (this.widget.dias["lun"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                    ),
+                    TextSpan(text: 'MA,   ',
+                        style: TextStyle(
+                            color: (this.widget.dias["mar"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                    ),
+                    TextSpan(text: 'MI,   ',
+                        style: TextStyle(
+                            color: (this.widget.dias["mie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                    ),
+                    TextSpan(text: 'JU,   ',
+                        style: TextStyle(
+                            color: (this.widget.dias["jue"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                    ),
+                    TextSpan(text: 'VI,   ',
+                        style: TextStyle(
+                            color: (this.widget.dias["vie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                    ),
+                    TextSpan(text: 'SA,   ',
+                        style: TextStyle(
+                            color: (this.widget.dias["sab"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                    ),
+                    TextSpan(text: 'DO. ',
+                        style: TextStyle(
+                            color: (this.widget.dias["dom"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                    ),
+                  ]
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class ItemListDestino {
+  int index;
   String terminal;
   String empresa;
   String destino;
@@ -666,7 +701,9 @@ class ItemListDestino {
   double tiempo;
 
   ItemListDestino(
-  { @required this.terminal,
+  { 
+    @required this.index,
+    @required this.terminal,
     @required this.empresa,
     @required this.destino,
     @required this.hora,

@@ -184,7 +184,7 @@ class _RegistroEmpresasState extends State<RegistroEmpresas> {
     );
   }
 
-  _labelNombreEmpresa (){
+  _labelNombreEmpresa(){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30,vertical: 10),
       width: double.infinity,
@@ -205,7 +205,7 @@ class _RegistroEmpresasState extends State<RegistroEmpresas> {
     );
   }
 
-  _labelNumeroContact (){
+  _labelNumeroContact(){
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30,vertical: 10),
       width: double.infinity,
@@ -215,6 +215,7 @@ class _RegistroEmpresasState extends State<RegistroEmpresas> {
           Container(
             width: double.infinity,
             child: TextField(
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 border: OutlineInputBorder()
               ),
@@ -263,6 +264,7 @@ class _RegistroEmpresasState extends State<RegistroEmpresas> {
               backgroundColor: Colors.red,
             )..show(context);
           }
+              limpiarCache();
         },
         child: Text("Guardar transporte"),
         color: Colors.orange,
