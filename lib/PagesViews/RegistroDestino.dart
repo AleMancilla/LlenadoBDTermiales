@@ -36,6 +36,8 @@ class _RegistroDestinoState extends State<RegistroDestino> {
 
   int indexDiss = 0;
 
+  String tipoVehiculo ;
+
 
   @override
   void initState() {
@@ -111,7 +113,7 @@ class _RegistroDestinoState extends State<RegistroDestino> {
                     onPressed: () {
                         DatePicker.showTime12hPicker(context,
                           showTitleActions: true,
-
+                          
                           onChanged: (date) {
                             print('change $date');
                           }, 
@@ -132,7 +134,7 @@ class _RegistroDestinoState extends State<RegistroDestino> {
 
                   SizedBox(height: 15,),
                   _labelDias(),
-
+                  _dropList(),
                   _labelCosto(context),
                   _labelEstimado(context),
                   _botonGuardar(),
@@ -147,6 +149,74 @@ class _RegistroDestinoState extends State<RegistroDestino> {
         ),
       ),
     );
+  }
+
+  _dropList(){
+     return  Container(
+       color: Colors.yellow[300],
+       margin: EdgeInsets.all(8),
+       padding: EdgeInsets.symmetric(horizontal: 20.0,vertical: 5.0),
+       child: DropdownButton<String>(
+         dropdownColor: Colors.yellow[50],
+          items: [
+            DropdownMenuItem<String>(
+              value: "FLOTA",
+              child: Text(
+                "FLOTA",
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: "BUS",
+              child: Text(
+                "BUS",
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: "MINIBUS",
+              child: Text(
+                "MINIBUS",
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: "TRUFI",
+              child: Text(
+                "TRUFI",
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: "TAXI",
+              child: Text(
+                "TAXI",
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: "TREN",
+              child: Text(
+                "TREN",
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: "OTROS",
+              child: Text(
+                "OTROS",
+              ),
+            ),
+          ],
+          onChanged: (value) {
+            tipoVehiculo = value;
+            print(" ######## $value ######## $value");
+            setState(() {
+              
+            });
+          },
+          hint: Text(
+            tipoVehiculo!=null?tipoVehiculo:"Please select the number!",
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+        ),
+     );
   }
 
   _labelDestino(){
@@ -379,7 +449,9 @@ class _RegistroDestinoState extends State<RegistroDestino> {
               "dom":domingo
             }, 
             costo: double.parse(textControllerPasaje.text), 
-            tiempo: double.parse(textControllerEstimado.text));
+            tiempo: double.parse(textControllerEstimado.text),
+            tipoVehiculo: tipoVehiculo,
+            );
 
           listaRutasTemp.add(itemAux);
 
@@ -399,7 +471,8 @@ class _RegistroDestinoState extends State<RegistroDestino> {
               "dom":domingo
             }, 
             costo: double.parse(textControllerPasaje.text), 
-            tiempo: double.parse(textControllerEstimado.text)
+            tiempo: double.parse(textControllerEstimado.text),
+            tipoVehiculo: tipoVehiculo
           );
           listaDestino.add(destino);
           setState(() {
@@ -483,7 +556,8 @@ class _RegistroDestinoState extends State<RegistroDestino> {
                 hora: element.hora,
                 diasHabiles: element.dias,
                 costoViaje: element.costo,
-                tiempoViaje: element.tiempo
+                tiempoViaje: element.tiempo,
+                tipoVehiculo: element.tipoVehiculo
               );
             }
           });
@@ -544,10 +618,11 @@ class ItemListViaje extends StatefulWidget {
   final Map dias;
   final double costo;
   final double tiempo;
+  final String tipoVehiculo;
 
   
 
-  const ItemListViaje({@required this.index, @required this.terminal,@required this.empresa,@required this.destino,@required this.hora,@required this.dias,@required this.costo,@required this.tiempo});
+  const ItemListViaje({@required this.index, @required this.terminal,@required this.empresa,@required this.destino,@required this.hora,@required this.dias,@required this.costo,@required this.tiempo, this.tipoVehiculo});
 
   @override
   _ItemListViajeState createState() => _ItemListViajeState();
@@ -646,43 +721,48 @@ class _ItemListViajeState extends State<ItemListViaje> with TickerProviderStateM
 
               ],
             ),
-              RichText(
-              text: TextSpan(
-                  // text: 'Don\'t have an account?',
-                  // style: TextStyle(
-                  //     color: Colors.black, fontSize: 18),
-                  children: <TextSpan>[
-                    TextSpan(text: 'LU,   ',
-                        style: TextStyle(
-                            color: (this.widget.dias["lun"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                    ),
-                    TextSpan(text: 'MA,   ',
-                        style: TextStyle(
-                            color: (this.widget.dias["mar"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                    ),
-                    TextSpan(text: 'MI,   ',
-                        style: TextStyle(
-                            color: (this.widget.dias["mie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                    ),
-                    TextSpan(text: 'JU,   ',
-                        style: TextStyle(
-                            color: (this.widget.dias["jue"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                    ),
-                    TextSpan(text: 'VI,   ',
-                        style: TextStyle(
-                            color: (this.widget.dias["vie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                    ),
-                    TextSpan(text: 'SA,   ',
-                        style: TextStyle(
-                            color: (this.widget.dias["sab"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                    ),
-                    TextSpan(text: 'DO. ',
-                        style: TextStyle(
-                            color: (this.widget.dias["dom"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                    ),
-                  ]
-              ),
+              Row(
+                children: [
+                  RichText(
+                  text: TextSpan(
+                      // text: 'Don\'t have an account?',
+                      // style: TextStyle(
+                      //     color: Colors.black, fontSize: 18),
+                      children: <TextSpan>[
+                        TextSpan(text: 'LU,   ',
+                            style: TextStyle(
+                                color: (this.widget.dias["lun"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                        ),
+                        TextSpan(text: 'MA,   ',
+                            style: TextStyle(
+                                color: (this.widget.dias["mar"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                        ),
+                        TextSpan(text: 'MI,   ',
+                            style: TextStyle(
+                                color: (this.widget.dias["mie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                        ),
+                        TextSpan(text: 'JU,   ',
+                            style: TextStyle(
+                                color: (this.widget.dias["jue"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                        ),
+                        TextSpan(text: 'VI,   ',
+                            style: TextStyle(
+                                color: (this.widget.dias["vie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                        ),
+                        TextSpan(text: 'SA,   ',
+                            style: TextStyle(
+                                color: (this.widget.dias["sab"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                        ),
+                        TextSpan(text: 'DO. ',
+                            style: TextStyle(
+                                color: (this.widget.dias["dom"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                        ),
+                      ]
+                  ),
             ),
+            Text(this.widget.tipoVehiculo??"no data")
+                ],
+              ),
           ],
         ),
       ),
@@ -699,6 +779,7 @@ class ItemListDestino {
   Map    dias;
   double costo;
   double tiempo;
+  String tipoVehiculo;
 
   ItemListDestino(
   { 
@@ -710,5 +791,6 @@ class ItemListDestino {
     @required this.dias,
     @required this.costo,
     @required this.tiempo,
+    @required this.tipoVehiculo,
     });
 }

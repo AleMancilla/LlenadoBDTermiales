@@ -195,8 +195,8 @@ const String readRepositoriesEmpresas = r'''
 
 const String addDestino = r'''
 
-mutation insertDestino($idTerminal: uuid, $idEmpresa: uuid, $destino: String, $hora: String, $diasHabiles: json, $costoViaje: float8, $tiempoViaje: float8) {
-  insert_Destino(objects: {idTerminal: $idTerminal, idEmpresa: $idEmpresa, destino: $destino, hora: $hora, diasHabiles: $diasHabiles, costoViaje: $costoViaje, tiempoViaje: $tiempoViaje}) {
+mutation insertDestino($idTerminal: uuid, $idEmpresa: uuid, $destino: String, $hora: String, $diasHabiles: json, $costoViaje: float8, $tiempoViaje: float8, $tipoVehiculo: String) {
+  insert_Destino(objects: {idTerminal: $idTerminal, idEmpresa: $idEmpresa, destino: $destino, hora: $hora, diasHabiles: $diasHabiles, costoViaje: $costoViaje, tiempoViaje: $tiempoViaje, tipoVehiculo: $tipoVehiculo}) {
     returning {
       idDestino
       costoViaje
@@ -210,7 +210,7 @@ mutation insertDestino($idTerminal: uuid, $idEmpresa: uuid, $destino: String, $h
 
 ''';
 
-Future<bool> insertarDestino({String idTerminal,String idEmpresa, String destino,String hora, Map diasHabiles,double costoViaje,double tiempoViaje})async{
+Future<bool> insertarDestino({String idTerminal,String idEmpresa, String destino,String hora, Map diasHabiles,double costoViaje,double tiempoViaje, String tipoVehiculo})async{
   final MutationOptions options = MutationOptions(
     documentNode: gql(addDestino),
     variables: <String, dynamic>{
@@ -220,7 +220,8 @@ Future<bool> insertarDestino({String idTerminal,String idEmpresa, String destino
       "hora": hora,
       "diasHabiles": diasHabiles,
       "costoViaje": costoViaje,
-      "tiempoViaje": tiempoViaje
+      "tiempoViaje": tiempoViaje,
+      "tipoVehiculo":tipoVehiculo
     },
   );
   final QueryResult result = await _client.mutate(options);
@@ -269,6 +270,7 @@ const String listadoRegistrados = r'''
     costoViaje
     tiempoViaje
     diasHabiles
+    tipoVehiculo
   }
 }
 

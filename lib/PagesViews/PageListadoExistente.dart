@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:llenarbdbuses/BD/graphql.dart';
-import 'package:llenarbdbuses/PagesViews/RegistroDestino.dart';
 
 class PageListadoExistente extends StatefulWidget {
   @override
@@ -56,7 +55,8 @@ class _PageListadoExistenteState extends State<PageListadoExistente> {
             hora:     element["hora"], 
             dias:     element["diasHabiles"], 
             costo:    element["costoViaje"]/0.0, 
-            tiempo:   element["tiempoViaje"]/0.0
+            tiempo:   element["tiempoViaje"]/0.0,
+            tipoVehiculo:     element["tipoVehiculo"], 
           );
         }).toList();
         setState(() {
@@ -74,10 +74,11 @@ class ItemListViajeList extends StatefulWidget {
   final Map dias;
   final double costo;
   final double tiempo;
+  final String tipoVehiculo;
 
   
 
-  const ItemListViajeList({@required this.terminal,@required this.empresa,@required this.destino,@required this.hora,@required this.dias,@required this.costo,@required this.tiempo});
+  const ItemListViajeList({@required this.terminal,@required this.empresa,@required this.destino,@required this.hora,@required this.dias,@required this.costo,@required this.tiempo, this.tipoVehiculo});
 
   @override
   _ItemListViajeListState createState() => _ItemListViajeListState();
@@ -136,43 +137,48 @@ class _ItemListViajeListState extends State<ItemListViajeList> with TickerProvid
 
             ],
           ),
-            RichText(
-            text: TextSpan(
-                // text: 'Don\'t have an account?',
-                // style: TextStyle(
-                //     color: Colors.black, fontSize: 18),
-                children: <TextSpan>[
-                  TextSpan(text: 'LU,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["lun"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'MA,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["mar"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'MI,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["mie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'JU,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["jue"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'VI,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["vie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'SA,   ',
-                      style: TextStyle(
-                          color: (this.widget.dias["sab"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                  TextSpan(text: 'DO. ',
-                      style: TextStyle(
-                          color: (this.widget.dias["dom"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
-                  ),
-                ]
-            ),
+            Row(
+              children: [
+                RichText(
+                text: TextSpan(
+                    // text: 'Don\'t have an account?',
+                    // style: TextStyle(
+                    //     color: Colors.black, fontSize: 18),
+                    children: <TextSpan>[
+                      TextSpan(text: 'LU,   ',
+                          style: TextStyle(
+                              color: (this.widget.dias["lun"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                      ),
+                      TextSpan(text: 'MA,   ',
+                          style: TextStyle(
+                              color: (this.widget.dias["mar"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                      ),
+                      TextSpan(text: 'MI,   ',
+                          style: TextStyle(
+                              color: (this.widget.dias["mie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                      ),
+                      TextSpan(text: 'JU,   ',
+                          style: TextStyle(
+                              color: (this.widget.dias["jue"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                      ),
+                      TextSpan(text: 'VI,   ',
+                          style: TextStyle(
+                              color: (this.widget.dias["vie"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                      ),
+                      TextSpan(text: 'SA,   ',
+                          style: TextStyle(
+                              color: (this.widget.dias["sab"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                      ),
+                      TextSpan(text: 'DO. ',
+                          style: TextStyle(
+                              color: (this.widget.dias["dom"])? Colors.green[600]:Colors.red.withOpacity(0.3)),
+                      ),
+                    ]
+                ),
           ),
+          Text(this.widget.tipoVehiculo??"no Data")
+              ],
+            ),
         ],
       ),
     );
