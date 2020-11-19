@@ -546,6 +546,12 @@ class _RegistroDestinoState extends State<RegistroDestino> {
           //   costoViaje: double.parse(textControllerPasaje.text),
           //   tiempoViaje: double.parse(textControllerEstimado.text)
           // );
+          Flushbar(
+                  title:  "Enviando datos a backend",
+                  message:  "Porfavor espera unos segundos mientras se completa la accion",
+                  duration:  Duration(seconds: 2),
+                  backgroundColor: Colors.orange,             
+                )..show(context);
           bool state = true;
           listaDestino.forEach((ItemListDestino element) async { 
             if(state){
@@ -561,20 +567,6 @@ class _RegistroDestinoState extends State<RegistroDestino> {
               );
             }
           });
-
-          Flushbar(
-                  title:  "Enviando datos a backend",
-                  message:  "Porfavor espera unos segundos mientras se completa la accion",
-                  duration:  Duration(seconds: 2),
-                  backgroundColor: Colors.orange,             
-                )..show(context);
-          // print("===== $value");
-          // bool state = await insertarEmpresa(
-          //   idTerminal: value,
-          //   imageURL: "url https//",
-          //   nombreEmp: textControllername.text,
-          //   numContacto: textControllernumber.text
-          // );
 
           if(state){
             Flushbar(
@@ -598,6 +590,14 @@ class _RegistroDestinoState extends State<RegistroDestino> {
             )..show(context);
           }
           limpiarCache();
+          // print("===== $value");
+          // bool state = await insertarEmpresa(
+          //   idTerminal: value,
+          //   imageURL: "url https//",
+          //   nombreEmp: textControllername.text,
+          //   numContacto: textControllernumber.text
+          // );
+
         },
         child: Text("Guardar transporte"),
         color: Colors.green,

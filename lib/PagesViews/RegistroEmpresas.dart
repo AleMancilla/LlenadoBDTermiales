@@ -99,9 +99,18 @@ class _RegistroEmpresasState extends State<RegistroEmpresas> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+   
+
     return SafeArea(
       child: Scaffold(
-        body: SingleChildScrollView(
+        body: options != null ? _bodyConf(size) : CircularProgressIndicator()
+      ),
+    );
+  }
+
+  _bodyConf(Size size){
+      return SingleChildScrollView(
           child: GestureDetector(
             onTap: () => FocusScope.of(context).unfocus(),
             child: Container(
@@ -120,7 +129,7 @@ class _RegistroEmpresasState extends State<RegistroEmpresas> {
                     SmartSelect<String>.single(
                       title: 'Selecciona Terminal',
                       value: value,
-                      choiceItems: options??[],
+                      choiceItems: options,
                       onChange: (state) => setState(() => value = state.value)
                     ),
 
@@ -179,9 +188,7 @@ class _RegistroEmpresasState extends State<RegistroEmpresas> {
               ),
             ),
           ),
-        ),
-      ),
-    );
+        );
   }
 
   _labelNombreEmpresa(){

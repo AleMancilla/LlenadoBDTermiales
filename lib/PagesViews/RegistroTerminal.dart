@@ -116,6 +116,7 @@ class _RegistroTerminalState extends State<RegistroTerminal> {
               backgroundColor: Colors.red,
             )..show(context);
           }
+          limpiarCache();
         },
         child: Text("Enviar"),
         color: Colors.orange,
